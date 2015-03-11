@@ -9,11 +9,15 @@ vector<int> values;
 vector<int> combination;
 vector<vector <int> > allCombinations;
 
+
+//custom implementation of the choose function (n_Choose_k)
 double choose(int n, int k) {
     if(k == 0) return 1; 
     return (n * choose(n - 1, k - 1)) / k;
 }
 
+
+//Prints a singe vector out
 void print1d(const vector<int>& v) {
 	static int count = 0;
 	for(int i = 0; i < v.size(); i++) {
@@ -22,6 +26,7 @@ void print1d(const vector<int>& v) {
 	cout << endl;
 }
 
+//prints a 2D vector out 
 void print2d(const vector<vector<int> > &v) {
 	for(int i = 0; i < v.size(); i++) {
 		for(int j = 0; j < v[i].size(); j++) {
@@ -31,12 +36,15 @@ void print2d(const vector<vector<int> > &v) {
 	}
 }
 
+//pushes a 1D vector onto a 2D vector
 void addComb(vector<vector<int> > &v, vector<int> &v2) {
 	// print1d(v2);
 	v.push_back(v2);
 }
 
-void go(int offset, int k) {
+//work function that recursively finds combinations
+//offset is the start value, k is the number of values to look for in the combination
+void findCombs(int offset, int k) {
 	if (k == 0) {
 		// print1d(combination);
 		addComb(allCombinations, combination);
@@ -44,16 +52,17 @@ void go(int offset, int k) {
 	}
 	for(int i = offset; i <= values.size() - k; ++i) {
 		combination.push_back(values[i]);
-		go(i + 1, k - 1);
+		findCombs(i + 1, k - 1);
 		combination.pop_back();
 	}
 }
 
+//
 int * combn(int x, int m) {
 	int num = choose(x,m);
 	for(int i = 0; i < x; ++i)
 		values.push_back(i+1);
-	go(0,m);
+	findCombs(0,m);
 	print2d(allCombinations);
 
 
