@@ -2,21 +2,12 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <algorithm>    // std::find
 #include <omp.h>
-
-
 using namespace std;
 
 vector<int> values;
 vector<vector <int> > allCombinations;
-
-
-//custom implementation of the choose function (n_Choose_k)
-double choose(int n, int k) {
-    if(k == 0) return 1; 
-    return (n * choose(n - 1, k - 1)) / k;
-}
-
 
 //Prints a singe vector out
 void print1d(const vector<int>& v) {
@@ -39,35 +30,24 @@ void print2d(const vector<vector<int> > &v) {
 
 //pushes a 1D vector onto a 2D vector
 void addComb(vector<vector<int> > &v, vector<int> &v2) {
-	v.push_back(v2);
+	if(std::find(v.begin(), v.end(), v2) == v.end()) {
+		//cout << "BOO YA UNIQUE!!" << endl;
+		v.push_back(v2);
+	}
+	//else
+		//cout << "NOOO IT'S A DUPLICATE!!!" << endl;
 }
-
-//work function that recursively finds combinations
-//offset is the start value, k is the number of values to look for in the combination
-// void findCombs(int offset, int k, vector<int> combination) {
-// 	if (k == 0) {
-// 		// print1d(combination);
-// 		addComb(allCombinations, combination);
-// 		return;
-// 	}
-// 	for(int i = offset; i <= values.size() - k; ++i) {
-// 		combination.push_back(values[i]);
-// 		findCombs(i + 1, k - 1, combination);
-// 		combination.pop_back();
-// 	}
-// }
 
 
 void findCombsPar(int offset, int k, vector<int> &combination) {
 	if (k == 0) {
-		// print1d(combination);
 		#pragma omp critical
 		addComb(allCombinations, combination);
 		return;
 	}
-	for(int i = offset; i <=values.size() - k; ++i) {
-		combination.push_back(values[offset]);
-		findCombsPar(offset + 1, k - 1, combination);
+	for(int i = offset; i < values.size(); ++i) {
+		combination.push_back(values[i]);
+		findCombsPar(i + 1, k - 1, combination);
 		combination.pop_back();
 	}
 }
@@ -76,37 +56,28 @@ void findCombsPar(int offset, int k, vector<int> &combination) {
 vector<vector<int> > combn(int x, int m) {
 	for(int i = 0; i < x; ++i)
 		values.push_back(i+1);
+
+	omp_set_num_threads(8); // Use 8 threads for all consecutive parallel regions
+
 	#pragma omp parallel for
-	for(int i = 0;  i < x - m + 1; i++) {
+	for(int i = 0;  i < x - m; i++) {
+		printf("Thread rank: %d\n", omp_get_thread_num());
 		vector<int> combination;
-		findCombsPar(i,m, combination);
+		findCombsPar(i, m, combination);
 	}
+
 	#pragma omp barrier
+	cout << "Total combinations: " << allCombinations.size() << endl;
 	print2d(allCombinations);
 	vector< vector<int> > ret;
 	ret = allCombinations;
 	return ret;
 }
 
-
-
-
-// template <typename T> 
-// T * combn(T x, int m) {
-
-	
-// }
-
-
-
 int main (int argc, char** argv) {
-
-	int x = 5;
+	int x = 6;
 	int m = 3;
 	vector<vector<int> > vals;
-    vals = combn(x,m);
-    int count = 0;
-
-    // cout << choose(45,22);
-    return 0;
+  vals = combn(x,m);
+  return 0;
 }
