@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <omp.h>
+
 
 using namespace std;
 
 vector<int> values;
-vector<int> combination;
 vector<vector <int> > allCombinations;
 
 
@@ -38,38 +39,52 @@ void print2d(const vector<vector<int> > &v) {
 
 //pushes a 1D vector onto a 2D vector
 void addComb(vector<vector<int> > &v, vector<int> &v2) {
-	// print1d(v2);
 	v.push_back(v2);
 }
 
 //work function that recursively finds combinations
 //offset is the start value, k is the number of values to look for in the combination
-void findCombs(int offset, int k) {
+// void findCombs(int offset, int k, vector<int> combination) {
+// 	if (k == 0) {
+// 		// print1d(combination);
+// 		addComb(allCombinations, combination);
+// 		return;
+// 	}
+// 	for(int i = offset; i <= values.size() - k; ++i) {
+// 		combination.push_back(values[i]);
+// 		findCombs(i + 1, k - 1, combination);
+// 		combination.pop_back();
+// 	}
+// }
+
+
+void findCombsPar(int offset, int k, vector<int> &combination) {
 	if (k == 0) {
 		// print1d(combination);
+		#pragma omp critical
 		addComb(allCombinations, combination);
 		return;
 	}
-	for(int i = offset; i <= values.size() - k; ++i) {
-		combination.push_back(values[i]);
-		findCombs(i + 1, k - 1);
+	for(int i = offset; i <=values.size() - k; ++i) {
+		combination.push_back(values[offset]);
+		findCombsPar(offset + 1, k - 1, combination);
 		combination.pop_back();
 	}
 }
 
 //
-int * combn(int x, int m) {
-	int num = choose(x,m);
+vector<vector<int> > combn(int x, int m) {
 	for(int i = 0; i < x; ++i)
 		values.push_back(i+1);
-	findCombs(0,m);
+	#pragma omp parallel for
+	for(int i = 0;  i < x - m + 1; i++) {
+		vector<int> combination;
+		findCombsPar(i,m, combination);
+	}
+	#pragma omp barrier
 	print2d(allCombinations);
-
-
-
-	int *ret = new int[num * m];
-
-
+	vector< vector<int> > ret;
+	ret = allCombinations;
 	return ret;
 }
 
@@ -86,9 +101,9 @@ int * combn(int x, int m) {
 
 int main (int argc, char** argv) {
 
-	int x = 10;
+	int x = 5;
 	int m = 3;
-	int * vals;
+	vector<vector<int> > vals;
     vals = combn(x,m);
     int count = 0;
 
