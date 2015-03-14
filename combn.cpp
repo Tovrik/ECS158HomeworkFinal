@@ -30,6 +30,8 @@ void print2d(const vector<vector<int> > &v) {
 
 //pushes a 1D vector onto a 2D vector
 void addComb(vector<vector<int> > &v, vector<int> &v2) {
+	// Kinda like memoization that you talked about
+	// If the combination already exists, don't add it
 	if(std::find(v.begin(), v.end(), v2) == v.end()) {
 		//cout << "BOO YA UNIQUE!!" << endl;
 		v.push_back(v2);
@@ -75,7 +77,7 @@ vector<vector<int> > combn(int x, int m) {
 }
 
 int main (int argc, char** argv) {
-	int x = 6;
+	int x = 5;
 	int m = 3;
 	vector<vector<int> > vals;
   vals = combn(x,m);
