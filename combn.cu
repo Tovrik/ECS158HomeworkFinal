@@ -1,5 +1,8 @@
 #include <thrust/device_vector.h>
 #include <thrust/copy.h>
+#include <thrust/iterator/zip_iterator.h>
+#include <thrust/device_vector.h>
+#include <thrust/tuple.h>
 #include <list>
 #include <vector>
 #include <algorithm>
@@ -9,105 +12,74 @@
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/functional.h>
 #include <thrust/sequence.h>
+#include <thrust/remove.h>
 #include <thrust/execution_policy.h>
-// struct find_one {
-//   __device__ int operator(int& x) const {
-//     return 
-//   }
-// };
 
-// template<typename It>
-// bool next_permutation1(It begin, It end) {
-//     if (begin == end)
-//                 return false;
+typedef thrust::tuple<int, int>            tpl2int;
+typedef thrust::device_vector<int>::iterator intiter;
+typedef thrust::counting_iterator<int>     countiter;
+typedef thrust::tuple<intiter, countiter>  tpl2intiter;
+typedef thrust::zip_iterator<tpl2intiter>  idxzip;
 
-//         It i = begin;
-//         ++i;
-//         if (i == end)
-//                 return false;
+struct find_index : public thrust::unary_function<tpl2int, int>
+{
 
-//         i = end;
-//         --i;
-
-//         while (true)
-//         {
-//                 It j = i;
-//                 --i;
-
-//                 if (*i < *j)
-//                 {
-//                         It k = end;
-
-//                         while (!(*i < *--k))
-//                                 /* pass */;
-
-//                         iter_swap(i, k);
-//                         reverse(j, end);
-//                         return true;
-//                 }
-
-//                 if (i == begin)
-//                 {
-//                         reverse(begin, end);
-//                         return false;
-//                 }
-//         }
-// };
-
-struct is_zero
+  __host__ __device__ int operator()(const tpl2int& x) const
   {
-    __host__ __device__
-    bool operator()(const bool x)
-    {
-      return (x == 0);
+    // If an element is true, then you get the y coordinate of the position
+    if (x.get<0>() == 0) {
+      return (x.get<1>() % 5)+1;
     }
-  };
+    else return -1;
+   }
+};
+
+struct remove_one {
+  __host__ __device__
+  bool operator() (const int i) {
+    return i != -1;
+  }
+};
 
  void calculateCombinations(int n, int r) {
-  //std:: vector< std:: vector<bool> > allPermutations;
-  //omp_set_num_threads(8);
-  std:: vector<int> v(n);
-  std:: fill(v.begin() + r, v.end(), 1);
-  thrust:: host_vector<int> allBits(50);
+  std::vector<int> v(n);
+  std::fill(v.begin() + r, v.end(), 1);
+  thrust::host_vector<int> allBits(50);
   int offset = 0;
-  // storage for the nonzero indices
-  //  thrust::device_vector<int> seq(n);
-  // thrust::sequence(seq.begin(), seq.end(), 0);
-  // thrust::device_vector<int> out(r);
-  // compute indices of nonzero elements
-  //  thrust::device_vector<int> indices(n);
-  // typedef thrust::device_vector<int>::iterator IndexIterator;
-  // thrust::counting_iterator<int> first(0);
-  // thrust::counting_iterator<int> last = first + n;
-   
 
   do {
-    //thrust::copy(v.begin(), v.end(), std::ostream_iterator<float>(std::cout, " "));
-    // allPermutations.push_back(v);
-    // IndexIterator indices_end = thrust::copy_if(thrust::make_counting_iterator(0),
-    //                                            thrust::make_counting_iterator(n),
-    //                                            v.begin(),
-    //                                            indices.begin(),
-    //                                            is_zero());
-    //printf("\n");
-    // thrust:: copy_if (v.begin(), v.end(), seq.begin(), out.begin(), thrust::identity<int>());
-    //thrust::device_vector<int> d_vec(v.begin(), v.end());
-    //thrust::copy_if(d_vec.begin(), d_vec.end(), indices.begin(), is_zero());
-    thrust::copy(v.begin(), v.end(), allBits.begin()+offset);
+    thrust::copy(v.begin(), v.end(), allBits.begin() + offset);
     offset += n;
-    printf("\n");
   } while(next_permutation(v.begin(), v.end()));
-thrust::copy(allBits.begin(), allBits.end(), std::ostream_iterator<float>(std::cout, " "));
-  // storage for the nonzero indices
-   
-  //int s = allPermutations.size();
-  // #pragma omp parallel for
-  //  for(int i = 0; i < s; ++i) {
-  //   combn(allPermutations[i], i);
-  // }
-//   thrust::device_vector< thrust::device_vector<bool> > d_vec(h_list.begin(), h_list.end
-// ());
-  //printf("s = %d", s);
+
+  thrust::device_vector<int> dev_bits = allBits;
+  //const int dev_bits_size = allBits.size();
+  //thrust:: device_vector<int> seq(dev_bits_size);
+  //thrust:: sequence(seq.begin(), seq.end(), 0);
+  thrust::device_vector<int> allPositions(dev_bits.size());
+  // thrust::copy(dev_bits.begin(), dev_bits.end(), std::ostream_iterator<float>(std::cout, " "));
+  thrust::device_vector<int> indices(dev_bits.size());
+  //typedef thrust::device_vector<int>::iterator IndexIterator;
+  thrust::counting_iterator<int> first_iter(0);
+  thrust::counting_iterator<int> last_iter = first_iter + dev_bits.size();
+  // thrust::copy_if(dev_bits.begin(), dev_bits.end(), seq.begin(), indices.begin(), iseven());
+
+  thrust::device_vector<int> allComb(10 * r);
+  
+  idxzip first = thrust::make_zip_iterator(thrust::make_tuple(dev_bits.begin(), first_iter));
+  idxzip last = thrust::make_zip_iterator(thrust::make_tuple(dev_bits.end(), last_iter));
+  // //find_index fi();
+   thrust::transform(first, last, allPositions.begin(), find_index());
+ // // indices now contains [1,2,5,7]
+  //idxzip iter(thrust::make_tuple(0, 1));
+ // std::cout << "BLA = " << std:: endl;
+ //  std::cout << thrust::get<0>(first[0]) << std::endl;;
+ //  std::cout << thrust::get<0>(first[1]) << std::endl;;
+  //std::cout << thrust::get<1>(first[7]) << std::endl;;
+   //thrust::copy_if(in_array, in_array + size, out_array, is_not_zero);
+  thrust:: copy_if(allPositions.begin(), allPositions.end(), allComb.begin(), remove_one());
+  thrust::copy(allComb.begin(), allComb.end(), std::ostream_iterator<float>(std::cout, " "));
+  printf("\n");
 }
 
 
