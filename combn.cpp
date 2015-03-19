@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <algorithm>    // std::find
+
 
 using namespace std;
 
@@ -33,53 +35,70 @@ void print2d(const vector<vector<int> > &v) {
 	}
 }
 
+
+
 void addComb(vector<vector<int> > &v, vector<int> &v2) {
 	v.push_back(v2);
 }
 
-void findCombs(int offset, int k) {
+void findCombs(int offset, int k, vector<vector <int> > &v) {
 	if (k == 0) {
 		// print1d(combination);
-		addComb(allCombinations, combination);
+		addComb(v, combination);
 		return;
 	}
 	for(int i = offset; i <= values.size() - k; ++i) {
 		combination.push_back(values[i]);
-		findCombs(i + 1, k - 1);
+		findCombs(i + 1, k - 1, v);
 		combination.pop_back();
 	}
 }
 
 void findEntriesPerLevel(int *array, int x, int m) {
-	for(int i = 0; i < x - m + 1 ; i++) {
-		array[i] = choose(x - i - 1, m - 1);
+	array[0] = 0;
+	for(int i = 1; i < x - m + 1; i++) {
+		array[i] = array[i] + (choose(x - i - 1, m - 1) * m);
 	}
+
+}
+
+void vectorToArray(vector<vector <int> > &v, int a[], int startIndex) {
+	vector< vector<int> >::const_iterator row; 
+    vector<int>::const_iterator col; 
+    int index = startIndex;
+
+    for (row = v.begin(); row != v.end(); ++row)
+    { 
+         for (col = row->begin(); col != row->end(); ++col)
+         { 
+            a[index] = *col; 
+            index++;
+         } 
+    } 
 }
 
 int * combn(int x, int m) {
-	int num = choose(x,m);
+	int size = choose(x,m); 
 	for(int i = 0; i < x; ++i)
 		values.push_back(i+1);
 
-	int size = choose(x,m); 
 	allCombs = new int[size * m];
 	numEntriesPerLevel = new int[x - m + 1];
 	findEntriesPerLevel(numEntriesPerLevel, x, m);
 
-	for(int i = 0; i < x - m + 1; i++){
-		cout << numEntriesPerLevel[i] << " ";	}
 
 	#pragma omp parallel for
 	for(int i = 1; i <= x - m + 1; i++){	
+		vector<vector <int> > *levelCombinations;
 		combination.push_back(i);
-		findCombs(i, m - 1);
+		findCombs(i, m - 1, levelCombinations);
+		// vectorToArray(levelCombinations, allCombs, numEntriesPerLevel[i - 1]);
 		combination.pop_back();
 	}
 	#pragma omp barrier
-	// print2d(allCombinations);
+	print2d(allCombinations);
 
-	int *ret = new int[num * m];
-	return ret;
+	return allCombs;
 }
 
 
