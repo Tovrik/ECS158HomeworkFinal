@@ -90,6 +90,8 @@ int * combn(int x, int m) {
 
   #pragma omp parallel for
   for(int i = 1; i <= x - m + 1; i++){  
+    // Local to each thread.
+    // May easily run out of space but meh.
     vector<vector <int> > levelCombinations;
     vector<int> combination;
     combination.push_back(i);
