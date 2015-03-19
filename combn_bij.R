@@ -12,7 +12,7 @@ combn_R <- function(x,m,FUN=NULL,simplify=0){
     }
     array
   }
-  print(numEntriesPerLevel)
+  #print(numEntriesPerLevel)
   combination <- c() #initialize combination
   for(i in 1:(x-m+1)){
     combination <- append(combination,i)
