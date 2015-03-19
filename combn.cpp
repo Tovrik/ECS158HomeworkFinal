@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>    // std::find
-
+#include <omp.h>
 
 using namespace std;
 
@@ -94,7 +94,7 @@ int * combn(int x, int m) {
 	findEntriesPerLevel(numEntriesPerLevel, x, m);
 
 
-	#pragma omp parallel for
+	#pragma omp parallel for schedule(dynamic)
 	for(int i = 1; i <= x - m + 1; i++){
 		vector<vector <int> > levelCombinations;
 		vector<int> combination;
@@ -104,7 +104,7 @@ int * combn(int x, int m) {
 		combination.pop_back();
 		// print2d(levelCombinations);
 	}
-	printArray(allCombs, size * m, m);
+	// printArray(allCombs, size * m, m);
 	#pragma omp barrier
 
 	return allCombs;
@@ -114,10 +114,17 @@ int * combn(int x, int m) {
 
 int main (int argc, char** argv) {
 
-	int x = 5;
-	int m = 3;
+	int x = 28;
+	int m = 14;
 	int * vals;
+	double startTime, endTime;
+	startTime = omp_get_wtime();
     vals = combn(x,m);
+    endTime = omp_get_wtime();
+
+	printf("%f,",endTime-startTime);
+
+
     int count = 0;
 
     delete[] allCombs;
