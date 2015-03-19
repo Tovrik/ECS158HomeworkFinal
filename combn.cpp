@@ -4,16 +4,20 @@
 #include <vector>
 #include <algorithm>    // std::find
 #include <omp.h>
-#include <time.h>
-
-//Compile using g++ -fopenmp -g combn.cpp -o combn.out
 
 using namespace std;
 
 vector<int> values;
+// vector<int> combination;
 vector<vector <int> > allCombinations;
+int *allCombs;
+int *numEntriesPerLevel;
 
-//Prints a singe vector out
+double choose(int n, int k) {
+    if(k == 0) return 1; 
+    return (n * choose(n - 1, k - 1)) / k;
+}
+
 void print1d(const vector<int>& v) {
 	static int count = 0;
 	for(int i = 0; i < v.size(); i++) {
@@ -22,7 +26,6 @@ void print1d(const vector<int>& v) {
 	cout << endl;
 }
 
-//prints a 2D vector out 
 void print2d(const vector<vector<int> > &v) {
 	for(int i = 0; i < v.size(); i++) {
 		for(int j = 0; j < v[i].size(); j++) {
@@ -32,63 +35,100 @@ void print2d(const vector<vector<int> > &v) {
 	}
 }
 
-//pushes a 1D vector onto a 2D vector
-void addComb(vector<vector<int> > &v, vector<int> &v2) {
-	// Kinda like memoization that you talked about
-	// If the combination already exists, don't add it
-	if(std::find(v.begin(), v.end(), v2) == v.end()) {
-		//cout << "BOO YA UNIQUE!!" << endl;
-		v.push_back(v2);
+void printArray(int a[], int size, int m) {
+	for(int i = 0; i < size; i++){
+		if(i % m == 0)
+			cout << endl;
+		cout << a[i] << " ";
 	}
-	//else
-		//cout << "NOOO IT'S A DUPLICATE!!!" << endl;
+	cout << endl;
 }
 
 
-void findCombsPar(int offset, int k, vector<int> &combination) {
+void addComb(vector<vector<int> > &v, vector<int> &v2) {
+	v.push_back(v2);
+}
+
+void findCombs(int offset, int k, vector<vector <int> > &v, vector<int> combination) {
 	if (k == 0) {
-		#pragma omp critical
-		addComb(allCombinations, combination);
+		// print1d(combination);
+		addComb(v, combination);
 		return;
 	}
-	for(int i = offset; i < values.size(); ++i) {
+	for(int i = offset; i <= values.size() - k; ++i) {
 		combination.push_back(values[i]);
-		findCombsPar(i + 1, k - 1, combination);
+		findCombs(i + 1, k - 1, v, combination);
 		combination.pop_back();
 	}
 }
 
-//
-vector<vector<int> > combn(int x, int m) {
+void findEntriesPerLevel(int *array, int x, int m) {
+	array[0] = 0;
+	for(int i = 1; i < x - m + 1; i++) {
+		array[i] = array[i - 1] + (choose(x - i, m - 1) * m);
+	}
+}
+
+void vectorToArray(vector<vector <int> > &v, int a[], int startIndex) {
+	vector< vector<int> >::const_iterator row; 
+    vector<int>::const_iterator col; 
+    int index = startIndex;
+
+    for (row = v.begin(); row != v.end(); ++row)
+    { 
+         for (col = row->begin(); col != row->end(); ++col)
+         { 
+            a[index] = *col; 
+            index++;
+         } 
+    } 
+}
+
+int * combn(int x, int m) {
+	int size = choose(x,m); 
 	for(int i = 0; i < x; ++i)
 		values.push_back(i+1);
 
-	omp_set_num_threads(8); // Use 8 threads for all consecutive parallel regions
+	allCombs = new int[size * m];
+	numEntriesPerLevel = new int[x - m + 1];
+	findEntriesPerLevel(numEntriesPerLevel, x, m);
 
-	#pragma omp parallel for
-	for(int i = 0;  i < x - m; i++) {
-		//printf("Thread rank: %d\n", omp_get_thread_num());
+
+	#pragma omp parallel for schedule(dynamic)
+	for(int i = 1; i <= x - m + 1; i++){
+		vector<vector <int> > levelCombinations;
 		vector<int> combination;
-		findCombsPar(i, m, combination);
+		combination.push_back(i);
+		findCombs(i, m - 1, levelCombinations, combination);
+		vectorToArray(levelCombinations, allCombs, numEntriesPerLevel[i - 1]);
+		combination.pop_back();
+		// print2d(levelCombinations);
 	}
-
+	// printArray(allCombs, size * m, m);
 	#pragma omp barrier
-	//cout << "Total combinations: " << allCombinations.size() << endl;
-	//print2d(allCombinations);
-	vector< vector<int> > ret;
-	ret = allCombinations;
-	return ret;
+
+	return allCombs;
 }
 
+
+
 int main (int argc, char** argv) {
-	int x = atoi(argv[1]);
-	int m = atoi(argv[2]);
-	clock_t time;
-	time = clock();
-	vector<vector<int> > vals;
-  vals = combn(x,m);
-  time = clock() - time;
-  //printf("Time Taken for %d values and %d combinations was: **%f** \n",x,m,((float)(time)/CLOCKS_PER_SEC));
-  printf("%f,", ((float)(time)/CLOCKS_PER_SEC));
-  return 0;
+
+	int x = 28;
+	int m = 14;
+	int * vals;
+	double startTime, endTime;
+	startTime = omp_get_wtime();
+    vals = combn(x,m);
+    endTime = omp_get_wtime();
+
+	printf("%f,",endTime-startTime);
+
+
+    int count = 0;
+
+    delete[] allCombs;
+    delete[] numEntriesPerLevel;
+
+    return 0;
 }
