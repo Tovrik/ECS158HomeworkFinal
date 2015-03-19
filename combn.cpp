@@ -8,7 +8,7 @@
 using namespace std;
 
 vector<int> values;
-vector<int> combination;
+// vector<int> combination;
 vector<vector <int> > allCombinations;
 int *allCombs;
 int *numEntriesPerLevel;
@@ -35,13 +35,21 @@ void print2d(const vector<vector<int> > &v) {
 	}
 }
 
+void printArray(int a[], int size, int m) {
+	for(int i = 0; i < size; i++){
+		if(i % m == 0)
+			cout << endl;
+		cout << a[i] << " ";
+	}
+	cout << endl;
+}
 
 
 void addComb(vector<vector<int> > &v, vector<int> &v2) {
 	v.push_back(v2);
 }
 
-void findCombs(int offset, int k, vector<vector <int> > &v) {
+void findCombs(int offset, int k, vector<vector <int> > &v, vector<int> combination) {
 	if (k == 0) {
 		// print1d(combination);
 		addComb(v, combination);
@@ -49,7 +57,7 @@ void findCombs(int offset, int k, vector<vector <int> > &v) {
 	}
 	for(int i = offset; i <= values.size() - k; ++i) {
 		combination.push_back(values[i]);
-		findCombs(i + 1, k - 1, v);
+		findCombs(i + 1, k - 1, v, combination);
 		combination.pop_back();
 	}
 }
@@ -57,9 +65,8 @@ void findCombs(int offset, int k, vector<vector <int> > &v) {
 void findEntriesPerLevel(int *array, int x, int m) {
 	array[0] = 0;
 	for(int i = 1; i < x - m + 1; i++) {
-		array[i] = array[i] + (choose(x - i - 1, m - 1) * m);
+		array[i] = array[i - 1] + (choose(x - i, m - 1) * m);
 	}
-
 }
 
 void vectorToArray(vector<vector <int> > &v, int a[], int startIndex) {
@@ -88,15 +95,17 @@ int * combn(int x, int m) {
 
 
 	#pragma omp parallel for
-	for(int i = 1; i <= x - m + 1; i++){	
-		vector<vector <int> > *levelCombinations;
+	for(int i = 1; i <= x - m + 1; i++){
+		vector<vector <int> > levelCombinations;
+		vector<int> combination;
 		combination.push_back(i);
-		findCombs(i, m - 1, levelCombinations);
-		// vectorToArray(levelCombinations, allCombs, numEntriesPerLevel[i - 1]);
+		findCombs(i, m - 1, levelCombinations, combination);
+		vectorToArray(levelCombinations, allCombs, numEntriesPerLevel[i - 1]);
 		combination.pop_back();
+		// print2d(levelCombinations);
 	}
+	printArray(allCombs, size * m, m);
 	#pragma omp barrier
-	print2d(allCombinations);
 
 	return allCombs;
 }
@@ -110,6 +119,9 @@ int main (int argc, char** argv) {
 	int * vals;
     vals = combn(x,m);
     int count = 0;
+
+    delete[] allCombs;
+    delete[] numEntriesPerLevel;
 
     return 0;
 }
