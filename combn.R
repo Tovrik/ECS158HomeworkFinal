@@ -2,51 +2,83 @@
 #Bijan Agahi bsagahi@ucdavis.edu
 #Stefan Peterson stpeterson@ucdavis.edu
 
-library('parallel')
-library("snow")
+#Import the existing libraries(mainly snow nad parallel)
+#library("snow")
 
-#cls <- parallel::makePSOCKcluster(rep('localhost',10))
+combn_R <- function(x, m, FUN = NULL, simplify = TRUE) {
+  # Determine the total size
+  size <- choose(x, m)
+  # Generate from 1 to n range
+  values <- seq_len(x)
+  # All combinations
+  allCombs <- vector(mode = "numeric", length = size * m)
+  # Number of entries Per Level
+  numEntriesPerLevel <- vector(mode = "numeric", length = x - m + 1)
+  # All permutations
+  allCombinations <- list()
+  # Setup the initial stuff
+  findEntriesPerLevel <- function() {
+    # Indices in R start at 1
+    numEntriesPerLevel[1] <- 0
+    for(i in 2:(x - m + 1)) {
+      numEntriesPerLevel[i] <- numEntriesPerLevel[i - 1] + (choose(x - i + 1, m - 1) * m)
+    }
+    numEntriesPerLevel
+  }
 
-addComb <- function() {
-  
-}
+  push_back <- function(combination, value) {
+    combination[length(combination)+1] <- value
+  }
 
+  pop_back <- function(combination) {
+    combination <- combination[-(length(combination))]
+  }
 
-test <- function(x, m) {
-  stopifnot(length(m) == 1L, is.numeric(m))
-  if(m < 0)
-    stop("m < 0", domain = NA)
-  if(is.numeric(x) && length(x) == 1L && x > 0 && trunc(x) == x)
-    x <- seq_len(x)
-  n <- length(x)
-  if(n < m)
-    stop("n < m", domain = NA)
-  m <- as.integer(m)
-  e <- 0
-  h <- m
-  a <- seq_len(m)
-  len.r <- length(r <- x[a])
-  count <- as.integer(round(choose(n,m)))
-  out <- vector("list", count)
-  out[[1L]] <- r
-  if(m > 0) {
-    i <- 2L
-    nmmp1 <- n - m + 1L
-    while(a[1L] != nmmp1) {
-      if(e < n - h) {
-        h <- 1L
-        e <- a[m]
-        j <- 1L
-      }
-      else {
-        e <- a[m - h]
-        h <- h + 1L
-        j <- 1L:h
-      }
-      a[m - h + j] <- e + j
-      out[[i]] <- r
-      i <- i + 1L
+  # # Assume v is a list since we are pushing to a 2d vector
+  # addComb <- function(v, v2) {
+  #   v[[length(v) + 1]] <- v2
+  # }
+
+  findCombs <- function(offset, k, v, combination) {
+    if(k == 0) {
+      v[[length(v) + 1]] <- combination
+      #v <- append(v, combination)
+      #print(combination)
+      #print("reaching 0")
+      #print(combination)
+      print(v)
+      return(0)
+    }
+    for(i in offset:((length(values) - k)+1) ) {
+      combination <- c(combination, values[i])
+      findCombs(i + 1, k - 1, v, combination)
+      combination <- pop_back(combination)
     }
   }
-out
+
+  numEntriesPerLevel <- findEntriesPerLevel()
+  #print(numEntriesPerLevel)
+
+  # This is the main loop
+  for(i in 1:(x - m + 1)) {
+    # List of vectors. In C++, 2d Vector
+    levelCombinations <- list()
+    # Our local 1d array
+    combination <- c()
+    #i <- 1
+    combination <- c(combination, i)
+    # Call to recursive function
+    findCombs(i + 1, m - 1, levelCombinations, combination)
+    #print(combination)
+    combination <- pop_back(combination)
+    #print(paste("Now Popping back\n"))
+    #print(allCombinations)
+    
+  }
+
 }
+
+# Test code
+x <- 5
+m <- 3
+combn_R(x, m)
