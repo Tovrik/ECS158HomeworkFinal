@@ -21,6 +21,15 @@ typedef thrust::counting_iterator<int>     countiter;
 typedef thrust::tuple<intiter, countiter>  tpl2intiter;
 typedef thrust::zip_iterator<tpl2intiter>  idxzip;
 
+int factorial(int n) {
+  int prod = 1;
+  for(int i = 1; i <= n; i++) {
+    prod *= i;
+  }
+  return prod;
+}
+
+
 struct find_index : public thrust::unary_function<tpl2int, int>
 {
 
@@ -44,7 +53,8 @@ struct remove_one {
  void calculateCombinations(int n, int r) {
   std::vector<int> v(n);
   std::fill(v.begin() + r, v.end(), 1);
-  thrust::host_vector<int> allBits(50);
+  int chooseSize = factorial(n) / (factorial(n-r)*factorial(r));
+  thrust::host_vector<int> allBits( chooseSize * n  );
   int offset = 0;
 
   do {
@@ -64,7 +74,7 @@ struct remove_one {
   thrust::counting_iterator<int> last_iter = first_iter + dev_bits.size();
   // thrust::copy_if(dev_bits.begin(), dev_bits.end(), seq.begin(), indices.begin(), iseven());
 
-  thrust::device_vector<int> allComb(10 * r);
+  thrust::device_vector<int> allComb(chooseSize * r);
   
   idxzip first = thrust::make_zip_iterator(thrust::make_tuple(dev_bits.begin(), first_iter));
   idxzip last = thrust::make_zip_iterator(thrust::make_tuple(dev_bits.end(), last_iter));
@@ -139,7 +149,7 @@ struct remove_one {
 // }
 
 int main (int argc, char** argv) {
-  int x = 5;
+  int x = 10;
   int m = 3;
   calculateCombinations(x, m);
   return 0;
