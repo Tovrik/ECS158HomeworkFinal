@@ -38,15 +38,17 @@ combn_R <- function(x, m, FUN = NULL, simplify = TRUE) {
   # addComb <- function(v, v2) {
   #   v[[length(v) + 1]] <- v2
   # }
+  position <- 1
 
   findCombs <- function(offset, k, v, combination) {
+    #position <- position + 1
     if(k == 0) {
-      v[[length(v) + 1]] <- combination
+      allCombinations[[position]] <<- combination
+      position <<- position + 1
       #v <- append(v, combination)
       #print(combination)
       #print("reaching 0")
-      #print(combination)
-      print(v)
+      #print(allCombinations)
       return(0)
     }
     for(i in offset:((length(values) - k)+1) ) {
@@ -72,9 +74,8 @@ combn_R <- function(x, m, FUN = NULL, simplify = TRUE) {
     #print(combination)
     combination <- pop_back(combination)
     #print(paste("Now Popping back\n"))
-    #print(allCombinations)
-    
   }
+  print(allCombinations)
 
 }
 
