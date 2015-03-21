@@ -136,6 +136,7 @@ This is a recursive implementation of the combinations function. Here we used \\
 
 \subsection{combn() --- Thrust implementation}
 \lstinputlisting[language=C++]{combn.cu}
+This code uses thrust to generate combinations. The main logic lies in the \verb|combn| function. It uses iteration to find all the permutations of the bit strings. Doing so, it then uses the thrust \verb|transform()| and \verb|zip_iterators()| to find all the combinations. There are also a few functors used here to find 0s in parallel.
 
 \subsection{combn() --- R-Snow implementation}
 \lstinputlisting[language=R]{combn.R}
