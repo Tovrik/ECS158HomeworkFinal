@@ -80,11 +80,15 @@ Looking at \verb; Graphic A1; we can see that our implementation of $combn()$ in
 Looking at \verb; Graphic A2; we can see that our implementation of $combn()$ is on average 2-3 times faster than the serial built in version provided in the utils package of the R library. This is to be expected since we are able to generate combinations in parallel speed up could be further improved by taking our approach of parallelization further down and assigning tasks recursively.
 
 \section{combn() in Thrust}
-For the Thrust version of the combination function, we decided to parallelize by finding the positions in parallel.
 
 \subsection{Strategy}
+For the Thrust version of the combinations function, we decided to parallelize by using bit vectors of size \verb|n|. Specifically, we generate a bit vector filled with 1s and 0s. Initially, the bit vector is initialized  with 1s (indicating true) from m-th positions till the end of the vector. We then lexicographically generate the next permutations of the bit strings. The final operation involves finding the positions of 0s in parallel. Upon doing so, we find all the combinations.
 
 \subsection{Implementation}
+
+\begin{center}\textcolor{black!50}{All the references to code will be references to Appendix: A.2}\\ \end{center}
+
+We decided to take an iterative approach to the implementation of the Thrust function in C++. The important aspect to note here is that the device functions in thrust can only be operated on 1d vectors as opposed to 2d vectors. Hence, the \verb|combn()| function returns and operates on a 1d vector. The core functionality of the program can be found in the function \verb|combn()|. The function takes in \verb|n|(the endpoint of the sequence) and \verb|r|(how many things to be taken at a time). In this function, we allocate certain space for the permutations and generate all the possibilities of the bit strings. Once we have found all the permutations of the bit strings, we essentially find all the indices where the element is equal to 0. This process takes advantage of powerful thrust functions such as \verb|transform| and the fancy iterators of thrust such as the \verb|zip_iterators()|. After we find all the positions where the bit value is 0, we transfer it to an array and return it. 
 \begin{center}\textcolor{black!50}{All the references to code will be references to Appendix: A.2}\\ \end{center}
 
 
