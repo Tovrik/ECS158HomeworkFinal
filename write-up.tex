@@ -89,6 +89,7 @@ Looking at \verb; Graphic A1; we can see that our implementation of $combn()$ in
 Looking at \verb; Graphic A2; we can see that our implementation of $combn()$ is on average 2-3 times faster than the serial built in version provided in the utils package of the R library. This is to be expected since we are able to generate combinations in parallel speed up could be further improved by taking our approach of parallelization further down and assigning tasks recursively.
 
 \section{combn() in Thrust}
+For the Thrust version of the combination function, we decided to parallelize by finding the positions in parallel.
 
 \subsection{combn() in Thrust: Strategy}
 
@@ -149,7 +150,7 @@ There are also a variety of files specific for testing purposes included in the 
 
 \textbf{Bijan Agahi}
 \begin{itemize}
-	\item R-Snow implementation
+	\item R implementation
 	\item Experiment data collection
 	\item Test scripting
 	\item Graphing in R, tabling
@@ -160,6 +161,7 @@ There are also a variety of files specific for testing purposes included in the 
 \begin{itemize}
 	\item Thrust implementation
 	\item Relevant research
+	\item R implementation
 \end{itemize}
 
 \end{document}
