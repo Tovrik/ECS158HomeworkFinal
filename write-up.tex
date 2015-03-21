@@ -125,9 +125,7 @@ Overall, the run times achieved by parallelization seem to have improvements, si
 \section{Appendix: Code}
 \subsection{combn() --- OpenMP implementation}
 \lstinputlisting[language=C++]{combnOpenMP.cpp}
-<<<<<<< HEAD
 
-=======
 This is a recursive implementation of the combinations function. Here we used \verb; #pragma omp parallel for schedule(dynamic); on line 67 to help load balance the parallelization of the threading.  \\
 >>>>>>> parent of f8c8b5c... cleaned up the folder and some writeup changes
 \subsection{combn() --- Thrust implementation}

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 \contentsline {section}{\numberline {1}Introduction}{3}
 \contentsline {subsection}{\numberline {1.1}Setup for Benchmarks}{3}
 \contentsline {section}{\numberline {2}combn() in OpenMP}{3}
@@ -31,6 +32,8 @@
 \contentsline {subsection}{\numberline {B.2}Graphic D2}{14}
 \contentsline {section}{\numberline {C}Appendix: Member Contributions}{15}
 =======
+=======
+>>>>>>> parent of f8c8b5c... cleaned up the folder and some writeup changes
 \contentsline {section}{\numberline {1}Introduction}{2}
 \contentsline {subsection}{\numberline {1.1}Setup for Benchmarks}{2}
 \contentsline {section}{\numberline {2}combn() in OpenMP}{2}
@@ -61,4 +64,7 @@
 \contentsline {subsection}{\numberline {B.1}Graphic D1}{10}
 \contentsline {subsection}{\numberline {B.2}Graphic D2}{11}
 \contentsline {section}{\numberline {C}Appendix: Member Contributions}{12}
+<<<<<<< HEAD
+>>>>>>> parent of f8c8b5c... cleaned up the folder and some writeup changes
+=======
 >>>>>>> parent of f8c8b5c... cleaned up the folder and some writeup changes
