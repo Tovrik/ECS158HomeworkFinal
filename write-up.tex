@@ -105,10 +105,10 @@ Looking at \verb; Graphic B2; we can see that our implementation of $combn()$ in
 \section{combn() in R-Snow}
 
 \subsection{Strategy}
-Our R function followed a recursive approach very similar to the OpenMP strategy. We opted to use a list of vectors instead of a 2D vector in our R implementation. A major drawback to this was that R did not have a simple built in 'push' function for us to push the combination values into the lists. Instead we would concatenate the list with itself and the value we wanted to add. Aside from this, the R code very closely parallels the OpenMP algorithm and code.
+Our R function followed a recursive approach very similar to the OpenMP strategy. We opted to use a list of vectors instead of a 2D vector in our R implementation. A major drawback to this was that R did not have a simple built in 'push' function for us to push the combination values into the lists. Instead we would concatenate the list with itself and the value we wanted to add. Aside from this, the R code very closely parallels the OpenMP algorithm and code. In addition, the indices were changed to start at 1.
 
 \subsection{Implementation}
-Lines 8-28 in our R code sets up all the variables, and declares the function to find how many entries each thread would need to find on each level (lines 20-27). Very similar to our OpenMP code, the findCombs function contains the bulk of the calculations, and is calls itself recursively. Once everything has been set up, we enter a for loop on line 65 that will call findCombs x-m+1 times. This is equal to the number of levels our list of vectors would have. This recursive call will iteratively fill the combination vector, then push it to the allCombinations list, and pop it off the combination vector.
+Lines 8-28 in our R code sets up all the variables, and declares the function to find how many entries each node would need to find on each level (lines 20-27). Very similar to our OpenMP code, the findCombs function contains the bulk of the calculations, and is calls itself recursively. Once everything has been set up, we enter a for loop on line 65 that will call findCombs x-m+1 times. This is equal to the number of levels our list of vectors would have. This recursive call will iteratively fill the combination vector, then push it to the allCombinations list, and pop it off the combination vector.
 
 \subsection{Data}
 
