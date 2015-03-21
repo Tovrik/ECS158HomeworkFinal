@@ -126,10 +126,12 @@ Overall, the run times achieved by parallelization seem to have improvements, si
 \section{Appendix: Code}
 \subsection{combn() --- OpenMP implementation}
 \lstinputlisting[language=C++]{combnOpenMP.cpp}
-This is a recursive implementation of the combinations function. Here we used \\ \verb;#pragma omp parallel for schedule(dynamic); on line 67 to help load balance the parallelization of the threading.  \\
+
 \subsection{combn() --- Thrust implementation}
 \lstinputlisting[language=C++]{combn.cu}
-This code uses the built in stl function $next_permutation()$ .... ARJUN FINISH THIS PLEASE \\
+
+\subsection{combn() --- R-Snow implementation}
+\lstinputlisting[language=R]{combn.R}
 
 
 There are also a variety of files specific for testing purposes included in the submitted .tar file.
@@ -162,6 +164,7 @@ There are also a variety of files specific for testing purposes included in the 
 \textbf{Bijan Agahi}
 \begin{itemize}
 	\item R implementation
+	\item R write-up
 	\item Experiment data collection
 	\item Test scripting
 	\item Graphing in R, tabling
@@ -171,6 +174,7 @@ There are also a variety of files specific for testing purposes included in the 
 \textbf{Arjun Bharadwaj}
 \begin{itemize}
 	\item Thrust implementation
+	\item Thrust write-up
 	\item Relevant research
 	\item R implementation
 \end{itemize}

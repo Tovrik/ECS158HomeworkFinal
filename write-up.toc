@@ -24,7 +24,8 @@
 \contentsline {section}{\numberline {A}Appendix: Code}{9}
 \contentsline {subsection}{\numberline {A.1}combn() --- OpenMP implementation}{9}
 \contentsline {subsection}{\numberline {A.2}combn() --- Thrust implementation}{10}
-\contentsline {section}{\numberline {B}Appendix: Graphics}{12}
-\contentsline {subsection}{\numberline {B.1}Graphic D1}{12}
-\contentsline {subsection}{\numberline {B.2}Graphic D2}{13}
-\contentsline {section}{\numberline {C}Appendix: Member Contributions}{14}
+\contentsline {subsection}{\numberline {A.3}combn() --- R-Snow implementation}{12}
+\contentsline {section}{\numberline {B}Appendix: Graphics}{14}
+\contentsline {subsection}{\numberline {B.1}Graphic D1}{14}
+\contentsline {subsection}{\numberline {B.2}Graphic D2}{14}
+\contentsline {section}{\numberline {C}Appendix: Member Contributions}{15}
