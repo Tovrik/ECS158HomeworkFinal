@@ -1,39 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-\contentsline {section}{\numberline {1}Introduction}{3}
-\contentsline {subsection}{\numberline {1.1}Setup for Benchmarks}{3}
-\contentsline {section}{\numberline {2}combn() in OpenMP}{3}
-\contentsline {subsection}{\numberline {2.1}Strategy}{3}
-\contentsline {subsection}{\numberline {2.2}Implementation}{3}
-\contentsline {subsection}{\numberline {2.3}Data}{4}
-\contentsline {subsubsection}{\numberline {2.3.1}Graphic A1}{4}
-\contentsline {subsubsection}{\numberline {2.3.2}Graphic A2}{5}
-\contentsline {subsection}{\numberline {2.4}Analysis}{5}
-\contentsline {section}{\numberline {3}combn() in Thrust}{5}
-\contentsline {subsection}{\numberline {3.1}Strategy}{6}
-\contentsline {subsection}{\numberline {3.2}Implementation}{6}
-\contentsline {subsection}{\numberline {3.3}Data}{6}
-\contentsline {subsubsection}{\numberline {3.3.1}Graphic B1}{6}
-\contentsline {subsubsection}{\numberline {3.3.2}Graphic B2}{7}
-\contentsline {subsection}{\numberline {3.4}Analysis}{7}
-\contentsline {section}{\numberline {4}combn() in R-Snow}{8}
-\contentsline {subsection}{\numberline {4.1}Strategy}{8}
-\contentsline {subsection}{\numberline {4.2}Implementation}{8}
-\contentsline {subsection}{\numberline {4.3}Data}{8}
-\contentsline {subsection}{\numberline {4.4}Analysis}{8}
-\contentsline {section}{\numberline {5}Conclusion}{8}
-\contentsline {section}{\numberline {6}Citations}{8}
-\contentsline {section}{\numberline {A}Appendix: Code}{9}
-\contentsline {subsection}{\numberline {A.1}combn() --- OpenMP implementation}{9}
-\contentsline {subsection}{\numberline {A.2}combn() --- Thrust implementation}{10}
-\contentsline {subsection}{\numberline {A.3}combn() --- R-Snow implementation}{12}
-\contentsline {section}{\numberline {B}Appendix: Graphics}{14}
-\contentsline {subsection}{\numberline {B.1}Graphic D1}{14}
-\contentsline {subsection}{\numberline {B.2}Graphic D2}{14}
-\contentsline {section}{\numberline {C}Appendix: Member Contributions}{15}
-=======
-=======
->>>>>>> parent of f8c8b5c... cleaned up the folder and some writeup changes
 \contentsline {section}{\numberline {1}Introduction}{2}
 \contentsline {subsection}{\numberline {1.1}Setup for Benchmarks}{2}
 \contentsline {section}{\numberline {2}combn() in OpenMP}{2}
@@ -44,27 +8,24 @@
 \contentsline {subsubsection}{\numberline {2.3.2}Graphic A2}{4}
 \contentsline {subsection}{\numberline {2.4}Analysis}{4}
 \contentsline {section}{\numberline {3}combn() in Thrust}{4}
-\contentsline {subsection}{\numberline {3.1}Strategy}{4}
-\contentsline {subsection}{\numberline {3.2}Implementation}{4}
+\contentsline {subsection}{\numberline {3.1}Strategy}{5}
+\contentsline {subsection}{\numberline {3.2}Implementation}{5}
 \contentsline {subsection}{\numberline {3.3}Data}{5}
 \contentsline {subsubsection}{\numberline {3.3.1}Graphic B1}{5}
-\contentsline {subsubsection}{\numberline {3.3.2}Graphic B2}{5}
+\contentsline {subsubsection}{\numberline {3.3.2}Graphic B2}{6}
 \contentsline {subsection}{\numberline {3.4}Analysis}{6}
-\contentsline {section}{\numberline {4}combn() in R-Snow}{6}
-\contentsline {subsection}{\numberline {4.1}Strategy}{6}
-\contentsline {subsection}{\numberline {4.2}Implementation}{6}
-\contentsline {subsection}{\numberline {4.3}Data}{6}
-\contentsline {subsection}{\numberline {4.4}Analysis}{6}
-\contentsline {section}{\numberline {5}Conclusion}{6}
-\contentsline {section}{\numberline {6}Bibliography}{6}
-\contentsline {section}{\numberline {A}Appendix: Code}{7}
-\contentsline {subsection}{\numberline {A.1}combn() --- OpenMP implementation}{7}
-\contentsline {subsection}{\numberline {A.2}combn() --- Thrust implementation}{8}
-\contentsline {section}{\numberline {B}Appendix: Graphics}{10}
-\contentsline {subsection}{\numberline {B.1}Graphic D1}{10}
-\contentsline {subsection}{\numberline {B.2}Graphic D2}{11}
-\contentsline {section}{\numberline {C}Appendix: Member Contributions}{12}
-<<<<<<< HEAD
->>>>>>> parent of f8c8b5c... cleaned up the folder and some writeup changes
-=======
->>>>>>> parent of f8c8b5c... cleaned up the folder and some writeup changes
+\contentsline {section}{\numberline {4}combn() in R-Snow}{7}
+\contentsline {subsection}{\numberline {4.1}Strategy}{7}
+\contentsline {subsection}{\numberline {4.2}Implementation}{7}
+\contentsline {subsection}{\numberline {4.3}Data}{7}
+\contentsline {subsection}{\numberline {4.4}Analysis}{7}
+\contentsline {section}{\numberline {5}Conclusion}{7}
+\contentsline {section}{\numberline {6}Bibliography}{7}
+\contentsline {section}{\numberline {A}Appendix: Code}{8}
+\contentsline {subsection}{\numberline {A.1}combn() --- OpenMP implementation}{8}
+\contentsline {subsection}{\numberline {A.2}combn() --- Thrust implementation}{9}
+\contentsline {subsection}{\numberline {A.3}combn() --- R-Snow implementation}{11}
+\contentsline {section}{\numberline {B}Appendix: Graphics}{13}
+\contentsline {subsection}{\numberline {B.1}Graphic D1}{13}
+\contentsline {subsection}{\numberline {B.2}Graphic D2}{13}
+\contentsline {section}{\numberline {C}Appendix: Member Contributions}{14}

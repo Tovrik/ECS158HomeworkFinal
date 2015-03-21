@@ -70,9 +70,9 @@ We decided to take a recursive approach to the implementation of the combination
 
 \subsection{Data}
 \subsubsection{Graphic A1}
-\includegraphics[scale = 0.5]{3D-OMP.png} \\
+\includegraphics[scale = 0.5]{images/3D-OMP.png} \\
 \subsubsection{Graphic A2}
-\includegraphics[scale = 0.5]{OMPvsR.png}
+\includegraphics[scale = 0.5]{images/OMPvsR.png}
 
 \subsection{Analysis}
 Looking at \verb; Graphic A1; we can see that our implementation of $combn()$ in OpenMP follows the standard bell curve where given a value $x$, its maximum number of calculations and therefore its longest running time occurs when $m = \frac{x}{2}$. We can see this by looking at Pascal's Triangle [Appendix Graphic 1] which directly correlates to the problem of creating a list of combinations. Those values which lie at the center of each row, vertically down the middle, are those with the greatest value for that given row. These values correspond to ${x \choose m}$ where again $m = \frac{x}{2}$. When $combn()$ is passed these values this is when we see the greatest running time for the function. \\
@@ -90,9 +90,9 @@ For the Thrust version of the combination function, we decided to parallelize by
 
 \subsection{Data}
 \subsubsection{Graphic B1}
-\includegraphics[scale = 0.5]{3D-Thrust.png} \\
+\includegraphics[scale = 0.5]{images/3D-Thrust.png} \\
 \subsubsection{Graphic B2}
-\includegraphics[scale = 0.5]{ThrustvsR.png}
+\includegraphics[scale = 0.5]{images/ThrustvsR.png}
 
 \subsection{Analysis}
 Looking at \verb; Graphic B1; we can see that our implementation of $combn()$ in Thrust follows a similar bell curve to that of the one in our OpenMP implementation. There is a large difference though, in that in the Thrust implementation, you never see a close to zero time operation like you do in a lot of the cases for the OpenMP. This is due to the fact that Thrust operates on the GPU and as such has to transfer data both to and from the GPU before and after computation. This travel time between CPU and GPU accounts for the "baseline" being roughly .025 seconds meaning no operations ever run faster than this.
@@ -126,8 +126,6 @@ Overall, the run times achieved by parallelization seem to have improvements, si
 \subsection{combn() --- OpenMP implementation}
 \lstinputlisting[language=C++]{combnOpenMP.cpp}
 
-This is a recursive implementation of the combinations function. Here we used \verb; #pragma omp parallel for schedule(dynamic); on line 67 to help load balance the parallelization of the threading.  \\
->>>>>>> parent of f8c8b5c... cleaned up the folder and some writeup changes
 \subsection{combn() --- Thrust implementation}
 \lstinputlisting[language=C++]{combn.cu}
 
@@ -140,12 +138,12 @@ There are also a variety of files specific for testing purposes included in the 
 \section{Appendix: Graphics}
 \subsection{Graphic D1}
 \begin{center}
-\includegraphics[scale = 0.4]{pascals-triangle-vert.jpg} \\
+\includegraphics[scale = 0.4]{images/pascals-triangle-vert.jpg} \\
 \end{center}
 
 \subsection{Graphic D2}
 \begin{center}
-\includegraphics[scale = 0.25]{5Choose3.jpg} \\
+\includegraphics[scale = 0.25]{images/5Choose3.jpg} \\
 \end{center}
 
 \newpage
