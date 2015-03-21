@@ -111,7 +111,10 @@ Our R function followed a recursive approach very similar to the OpenMP strategy
 Lines 8-28 in our R code sets up all the variables, and declares the function to find how many entries each node would need to find on each level (lines 20-27). Very similar to our OpenMP code, the findCombs function contains the bulk of the calculations, and is calls itself recursively. Once everything has been set up, we enter a for loop on line 65 that will call findCombs x-m+1 times. This is equal to the number of levels our list of vectors would have. This recursive call will iteratively fill the combination vector, then push it to the allCombinations list, and pop it off the combination vector.
 
 \subsection{Data}
-
+\subsubsection{Graphic C1}
+\includegraphics[scale = 0.5]{images/3D-R} \\
+\subsubsection{Graphic C2}
+\includegraphics[scale = 0.5]{images/RvsR.png}
 
 \subsection{Analysis}
 This recursive version of combn() run orders of magnitude slower than it's serial counterpart. We believe this is due mostly to the fact that there is very little work being done per function call, and we did not fully take advantage or R's vector processing capabilities. Upon looking at the official R documentation, R's built in combn() function is very efficient with its use to space, as well as taking full advantage of vector processing. Ultimately, it was much more effective to run this program in parallel than recursively.

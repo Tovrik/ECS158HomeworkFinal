@@ -18,14 +18,16 @@
 \contentsline {subsection}{\numberline {4.1}Strategy}{7}
 \contentsline {subsection}{\numberline {4.2}Implementation}{8}
 \contentsline {subsection}{\numberline {4.3}Data}{8}
-\contentsline {subsection}{\numberline {4.4}Analysis}{8}
-\contentsline {section}{\numberline {5}Conclusion}{8}
-\contentsline {section}{\numberline {6}Citations}{8}
-\contentsline {section}{\numberline {A}Appendix: Code}{9}
-\contentsline {subsection}{\numberline {A.1}combn() --- OpenMP implementation}{9}
-\contentsline {subsection}{\numberline {A.2}combn() --- Thrust implementation}{10}
-\contentsline {subsection}{\numberline {A.3}combn() --- R-Snow implementation}{12}
-\contentsline {section}{\numberline {B}Appendix: Graphics}{14}
-\contentsline {subsection}{\numberline {B.1}Graphic D1}{14}
-\contentsline {subsection}{\numberline {B.2}Graphic D2}{14}
-\contentsline {section}{\numberline {C}Appendix: Member Contributions}{15}
+\contentsline {subsubsection}{\numberline {4.3.1}Graphic C1}{8}
+\contentsline {subsubsection}{\numberline {4.3.2}Graphic C2}{9}
+\contentsline {subsection}{\numberline {4.4}Analysis}{9}
+\contentsline {section}{\numberline {5}Conclusion}{9}
+\contentsline {section}{\numberline {6}Citations}{10}
+\contentsline {section}{\numberline {A}Appendix: Code}{11}
+\contentsline {subsection}{\numberline {A.1}combn() --- OpenMP implementation}{11}
+\contentsline {subsection}{\numberline {A.2}combn() --- Thrust implementation}{12}
+\contentsline {subsection}{\numberline {A.3}combn() --- R-Snow implementation}{14}
+\contentsline {section}{\numberline {B}Appendix: Graphics}{16}
+\contentsline {subsection}{\numberline {B.1}Graphic D1}{16}
+\contentsline {subsection}{\numberline {B.2}Graphic D2}{16}
+\contentsline {section}{\numberline {C}Appendix: Member Contributions}{17}
