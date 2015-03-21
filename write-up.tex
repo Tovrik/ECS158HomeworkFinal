@@ -3,7 +3,8 @@
 \usepackage{titlesec}
 
 \titleformat*{\section}{\LARGE\bfseries}
-\titleformat*{\subsection}{\large\bfseries}
+\titleformat*{\subsection}{\Large\bfseries}
+\titleformat*{\subsubsection}{\normalsize\bfseries}
 
 
 \setlength{\oddsidemargin}{0.0in}
@@ -66,7 +67,9 @@ All tests for the purposes of this paper were run on Tetraat University of Calif
 
 \section{combn() in OpenMP}
 \subsection{Strategy}
-For the OpenMP version of the combinations function, we decided to parallelize by dedicating each thread to a subsection of the problem 
+For the OpenMP version of the combinations function, we decided to parallelize by dedicating each thread to a subsection of the problem. Each subsection corresponds to the group of combinations which begin with the same value. In [Appendix Graphic 2] we see all the possible combinations for a ${5 \choose 3}$. Those can be clumped into the three groups each beginning with 1, 2, or 3. \verb;Thread 1; will handle the computation of all combinations beginning with $1$, \verb;thread 2; will handle those beginning with $2$ and \verb;thread 3; will handle those beginning with $3$. Obviously this is not load balanced for small cases since \verb;thread 1; is doing significantly more work than the rest of the threads. When we get to larger problems, we use the built in dynamic scheduling of OpenMP to make an attempt at load balancing. If we had only 2 threads running on the above problem, \verb;thread 1; would still do its chunk of the computation, then \verb;thread 2; would do its and when it finishes (which should be before \verb;thread 1;) it grabs the next process to be executed.
+
+
 
 \subsection{Implementation}
 
@@ -75,11 +78,15 @@ We decided to take a recursive approach to the implementation of the combination
 
 
 \subsection{Data}
+\subsubsection{Graphic A1}
 \includegraphics[scale = 0.5]{3D-OMP.png} \\
-
+\subsubsection{Graphic A2}
 \includegraphics[scale = 0.5]{OMPvsR.png}
 
 \subsection{Analysis}
+Looking at \verb; Graphic A1; we can see that our implementation of $combn()$ in OpenMP follows the standard bell curve where given a value $x$, its maximum number of calculations and therefore its longest running time occurs when $m = \frac{x}{2}$. We can see this by looking at Pascal's Triangle [Appendix Graphic 1] which directly correlates to the problem of creating a list of combinations. Those values which lie at the center of each row, vertically down the middle, are those with the greatest value for that given row. These values correspond to ${x \choose m}$ where again $m = \frac{x}{2}$. When $combn()$ is passed these values this is when we see the greatest running time for the function. \\
+
+Looking at \verb; Graphic A2; we can see that our implementation of $combn()$ is on average 2-3 times faster than the serial built in version provided in the utils package of the R library. This is to be expected since we are able to generate combinations in parallel speed up could be further improved by taking our approach of parallelization further down and assigning tasks recursively.
 
 \section{combn() in Thrust}
 
@@ -94,25 +101,9 @@ We decided to take a recursive approach to the implementation of the combination
 
 
 
-\section{Research Papers}
-
-\subsection{Authors --- Position}
-
-\subsubsection{Description}
-
-\subsubsection{Analysis}
-
-
-
-
-
 
 
 \section{Conclusion}
-stuff here
-
-
-
 
 \section{Bibliography}
 
@@ -131,6 +122,17 @@ This code is directly translate from the OpenMP version above, using the same al
 
 There are also a variety of files specific for testing purposes included in the submitted .tar file.
 
+\section{Appendix: Graphics}
+\subsection{Graphic D1}
+\begin{center}
+\includegraphics[scale = 0.4]{pascals-triangle-vert.jpg} \\
+\end{center}
+
+\subsection{Graphic D2}
+\begin{center}
+\includegraphics[scale = 0.25]{5Choose3.jpg} \\
+\end{center}
+
 \newpage
 \section{Appendix: Member Contributions}
 
@@ -138,11 +140,10 @@ There are also a variety of files specific for testing purposes included in the 
 \begin{itemize}
 	\item \LaTeX{} Formatting, editing
 	\item OpenMP implementation
+	\item OpenMP write-up
 	\item Abstract
 	\item Introduction
-	\item Research paper summarization/analysis
 	\item Conclusion
-	\item Data analysis writeup
 	\item Relevant research
 \end{itemize}
 
