@@ -98,7 +98,7 @@ We decided to take an iterative approach to the implementation of the Thrust fun
 \includegraphics[scale = 0.5]{images/ThrustvsR.png}
 
 \subsection{Analysis}
-Looking at \verb; Graphic B1; we can see that our implementation of $combn()$ in Thrust follows a similar bell curve to that of the one in our OpenMP implementation. There is a large difference though, in that in the Thrust implementation, you never see a close to zero time operation like you do in a lot of the cases for the OpenMP. This is due to the fact that Thrust operates on the GPU and as such has to transfer data both to and from the GPU before and after computation. This travel time between CPU and GPU accounts for the "baseline" being roughly .025 seconds meaning no operations ever run faster than this.
+Looking at \verb; Graphic B1; we can see that our implementation of $combn()$ in Thrust follows a similar bell curve to that of the one in our OpenMP implementation. There is a large difference though, in that in the Thrust implementation, you never see a close to zero time operation like you do in a lot of the cases for the OpenMP. This is due to the fact that Thrust operates on the GPU and as such has to transfer data both to and from the GPU before and after computation. This travel time between CPU and GPU accounts for the "baseline" being roughly .025 seconds meaning no operations ever run faster than this. There is also an outlier in this graph when array size is 5 and m is 2. This occurs on the first time running the code after compilation and regardless of passed in values will run for an extended period of time.
 
 Looking at \verb; Graphic B2; we can see that our implementation of $combn()$ in Thrust outperforms the serial built in version provided in the utils package of the R library for values where given an x and m for ${x \choose m}$ the value of m is roughly $\frac{x}{4} < m < \frac{3x}{4}$. So for values which are generally computation heavy, the Thrust implementation is faster and provides performance gains, but for less computation heavy problems, the transport cost is not worth the small speed up of the parallelization.
 
@@ -108,6 +108,9 @@ Looking at \verb; Graphic B2; we can see that our implementation of $combn()$ in
 Our R function followed a recursive approach very similar to the OpenMP strategy. We opted to use a list of vectors instead of a 2D vector in our R implementation. A major drawback to this was that R did not have a simple built in 'push' function for us to push the combination values into the lists. Instead we would concatenate the list with itself and the value we wanted to add. Aside from this, the R code very closely parallels the OpenMP algorithm and code. In addition, the indices were changed to start at 1.
 
 \subsection{Implementation}
+\begin{center}\textcolor{black!50}{All the references to code will be references to Appendix: A.3}\\ \end{center}
+
+
 Lines 8-28 in our R code sets up all the variables, and declares the function to find how many entries each node would need to find on each level (lines 20-27). Very similar to our OpenMP code, the findCombs function contains the bulk of the calculations, and is calls itself recursively. Once everything has been set up, we enter a for loop on line 65 that will call findCombs x-m+1 times. This is equal to the number of levels our list of vectors would have. This recursive call will iteratively fill the combination vector, then push it to the allCombinations list, and pop it off the combination vector.
 
 \subsection{Data}

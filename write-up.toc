@@ -14,14 +14,14 @@
 \contentsline {subsubsection}{\numberline {3.3.1}Graphic B1}{6}
 \contentsline {subsubsection}{\numberline {3.3.2}Graphic B2}{7}
 \contentsline {subsection}{\numberline {3.4}Analysis}{7}
-\contentsline {section}{\numberline {4}combn() in R-Snow}{7}
-\contentsline {subsection}{\numberline {4.1}Strategy}{7}
+\contentsline {section}{\numberline {4}combn() in R-Snow}{8}
+\contentsline {subsection}{\numberline {4.1}Strategy}{8}
 \contentsline {subsection}{\numberline {4.2}Implementation}{8}
-\contentsline {subsection}{\numberline {4.3}Data}{8}
-\contentsline {subsubsection}{\numberline {4.3.1}Graphic C1}{8}
+\contentsline {subsection}{\numberline {4.3}Data}{9}
+\contentsline {subsubsection}{\numberline {4.3.1}Graphic C1}{9}
 \contentsline {subsubsection}{\numberline {4.3.2}Graphic C2}{9}
-\contentsline {subsection}{\numberline {4.4}Analysis}{9}
-\contentsline {section}{\numberline {5}Conclusion}{9}
+\contentsline {subsection}{\numberline {4.4}Analysis}{10}
+\contentsline {section}{\numberline {5}Conclusion}{10}
 \contentsline {section}{\numberline {6}Citations}{10}
 \contentsline {section}{\numberline {A}Appendix: Code}{11}
 \contentsline {subsection}{\numberline {A.1}combn() --- OpenMP implementation}{11}
