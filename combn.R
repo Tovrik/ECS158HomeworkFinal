@@ -3,7 +3,12 @@
 #Stefan Peterson stpeterson@ucdavis.edu
 
 #Import the existing libraries(mainly snow nad parallel)
-#library("snow")
+library('parallel')
+library("snow")
+cls <- parallel::makePSOCKcluster(rep('localhost',10))
+
+
+
 
 combn_R <- function(x, m, FUN = NULL, simplify = TRUE) {
   # Determine the total size
@@ -43,10 +48,10 @@ combn_R <- function(x, m, FUN = NULL, simplify = TRUE) {
   findCombs <- function(offset, k, v, combination) {
     #position <- position + 1
     if(k == 0) {
-      allCombinations[[position]] <<- combination
+      v[[position]] <- combination
       position <<- position + 1
       #v <- append(v, combination)
-      #print(combination)
+      print(combination)
       #print("reaching 0")
       #print(allCombinations)
       return(0)
@@ -58,24 +63,42 @@ combn_R <- function(x, m, FUN = NULL, simplify = TRUE) {
     }
   }
 
-  numEntriesPerLevel <- findEntriesPerLevel()
-  #print(numEntriesPerLevel)
-
-  # This is the main loop
-  for(i in 1:(x - m + 1)) {
+  loop <- function(i, m) {
     # List of vectors. In C++, 2d Vector
     levelCombinations <- list()
     # Our local 1d array
     combination <- c()
-    #i <- 1
     combination <- c(combination, i)
+    print(combination)
     # Call to recursive function
     findCombs(i + 1, m - 1, levelCombinations, combination)
+    
     #print(combination)
     combination <- pop_back(combination)
     #print(paste("Now Popping back\n"))
   }
-  print(allCombinations)
+  
+  numEntriesPerLevel <- findEntriesPerLevel()
+  #print(numEntriesPerLevel)
+
+  # This is the main loop
+  #for(i in 1:(x - m + 1)) {
+    # List of vectors. In C++, 2d Vector
+    #levelCombinations <- list()
+    # Our local 1d array
+    #combination <- c()
+    #i <- 1
+    #combination <- c(combination, i)
+    # Call to recursive function
+    #findCombs(i + 1, m - 1, levelCombinations, combination)
+    
+    #print(combination)
+    #combination <- pop_back(combination)
+    #print(paste("Now Popping back\n"))
+  #}
+  clusterExport(cls, c("loop", "i", "m"), envir=environment ())
+  x <- clusterApply(cls, 1:(x-m+1), loop, m)
+  #print(x)
 
 }
 
