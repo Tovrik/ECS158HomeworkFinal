@@ -58,7 +58,7 @@ All tests for the purposes of this paper were run on Tetraat University of Calif
 
 \section{combn() in OpenMP}
 \subsection{Strategy}
-For the OpenMP version of the combinations function, we decided to parallelize by dedicating each thread to a subsection of the problem. Each subsection corresponds to the group of combinations which begin with the same value. In [Appendix Graphic D2] we see all the possible combinations for a ${5 \choose 3}$. Those can be clumped into the three groups each beginning with 1, 2, or 3. \verb;Thread 1; will handle the computation of all combinations beginning with $1$, \verb;thread 2; will handle those beginning with $2$ and \verb;thread 3; will handle those beginning with $3$. Obviously this is not load balanced for small cases since \verb;thread 1; is doing significantly more work than the rest of the threads. When we get to larger problems, we use the built in dynamic scheduling of OpenMP to make an attempt at load balancing. If we had only 2 threads running on the above problem, \verb;thread 1; would still do its chunk of the computation, then \verb;thread 2; would do its and when it finishes (which should be before \verb;thread 1;) it grabs the next process to be executed.
+For the OpenMP version of the combinations function, we decided to parallelize by dedicating each thread to a subsection of the problem. Each subsection corresponds to the group of combinations which begin with the same value. In [Appendix Graphic 2] we see all the possible combinations for a ${5 \choose 3}$. Those can be clumped into the three groups each beginning with 1, 2, or 3. \verb;Thread 1; will handle the computation of all combinations beginning with $1$, \verb;thread 2; will handle those beginning with $2$ and \verb;thread 3; will handle those beginning with $3$. Obviously this is not load balanced for small cases since \verb;thread 1; is doing significantly more work than the rest of the threads. When we get to larger problems, we use the built in dynamic scheduling of OpenMP to make an attempt at load balancing. If we had only 2 threads running on the above problem, \verb;thread 1; would still do its chunk of the computation, then \verb;thread 2; would do its and when it finishes (which should be before \verb;thread 1;) it grabs the next process to be executed.
 
 
 
@@ -70,12 +70,12 @@ We decided to take a recursive approach to the implementation of the combination
 
 \subsection{Data}
 \subsubsection{Graphic A1}
-\includegraphics[scale = 0.5]{images/3D-OMP.png} \\
+\includegraphics[scale = 0.5]{3D-OMP.png} \\
 \subsubsection{Graphic A2}
-\includegraphics[scale = 0.5]{images/OMPvsR.png}
+\includegraphics[scale = 0.5]{OMPvsR.png}
 
 \subsection{Analysis}
-Looking at \verb; Graphic A1; we can see that our implementation of $combn()$ in OpenMP follows the standard bell curve where given a value $x$, its maximum number of calculations and therefore its longest running time occurs when $m = \frac{x}{2}$. We can see this by looking at Pascal's Triangle [Appendix Graphic D1] which directly correlates to the problem of creating a list of combinations. Those values which lie at the center of each row, vertically down the middle, are those with the greatest value for that given row. These values correspond to ${x \choose m}$ where again $m = \frac{x}{2}$. When $combn()$ is passed these values this is when we see the greatest running time for the function. \\
+Looking at \verb; Graphic A1; we can see that our implementation of $combn()$ in OpenMP follows the standard bell curve where given a value $x$, its maximum number of calculations and therefore its longest running time occurs when $m = \frac{x}{2}$. We can see this by looking at Pascal's Triangle [Appendix Graphic 1] which directly correlates to the problem of creating a list of combinations. Those values which lie at the center of each row, vertically down the middle, are those with the greatest value for that given row. These values correspond to ${x \choose m}$ where again $m = \frac{x}{2}$. When $combn()$ is passed these values this is when we see the greatest running time for the function. \\
 
 Looking at \verb; Graphic A2; we can see that our implementation of $combn()$ is on average 2-3 times faster than the serial built in version provided in the utils package of the R library. This is to be expected since we are able to generate combinations in parallel speed up could be further improved by taking our approach of parallelization further down and assigning tasks recursively.
 
@@ -90,12 +90,12 @@ For the Thrust version of the combination function, we decided to parallelize by
 
 \subsection{Data}
 \subsubsection{Graphic B1}
-\includegraphics[scale = 0.5]{images/3D-Thrust.png} \\
+\includegraphics[scale = 0.5]{3D-Thrust.png} \\
 \subsubsection{Graphic B2}
-\includegraphics[scale = 0.5]{images/ThrustvsR.png}
+\includegraphics[scale = 0.5]{ThrustvsR.png}
 
 \subsection{Analysis}
-Looking at \verb; Graphic B1; we can see that our implementation of $combn()$ in Thrust follows a similar bell curve to that of the one in our OpenMP implementation. There is a large difference though, in that in the Thrust implementation, you never see a close to zero time operation like you do in a lot of the cases for the OpenMP. This is due to the fact that Thrust operates on the GPU and as such has to transfer data both to and from the GPU before and after computation. This travel time between CPU and GPU accounts for the "baseline" being roughly .025 seconds meaning no operations ever run faster than this. There is also an outlier on this graph when array size is 5 and m size is 2. This outlier is due to the fact that 
+Looking at \verb; Graphic B1; we can see that our implementation of $combn()$ in Thrust follows a similar bell curve to that of the one in our OpenMP implementation. There is a large difference though, in that in the Thrust implementation, you never see a close to zero time operation like you do in a lot of the cases for the OpenMP. This is due to the fact that Thrust operates on the GPU and as such has to transfer data both to and from the GPU before and after computation. This travel time between CPU and GPU accounts for the "baseline" being roughly .025 seconds meaning no operations ever run faster than this.
 
 Looking at \verb; Graphic B2; we can see that our implementation of $combn()$ in Thrust outperforms the serial built in version provided in the utils package of the R library for values where given an x and m for ${x \choose m}$ the value of m is roughly $\frac{x}{4} < m < \frac{3x}{4}$. So for values which are generally computation heavy, the Thrust implementation is faster and provides performance gains, but for less computation heavy problems, the transport cost is not worth the small speed up of the parallelization.
 
@@ -117,16 +117,19 @@ Looking at \verb; Graphic B2; we can see that our implementation of $combn()$ in
 Overall, the run times achieved by parallelization seem to have improvements, significantly so in the OpenMP implementation. Each run time seems to have its own pros and cons. Thrust provided strong performance gains over the serial version but required the overhead of having to transport data on a slow connection from the CPU to GPU. The algorithm we used for parallel computation was also probably not the most efficient and we could have seen even better gains in performance, but with Thrust this still doesn't matter for "easy" computations where transport time far exceeds computation time. OpenMP runs the fastest of the three and this is due to the fact that both our algorithm for OpenMP was probably the most efficient of our three algorithms and that there is not overhead necessary before beginning the computations. The biggest hurdle with our OpenMP implementation is making sure that it is load balanced.
 
 
-\section{Citations}
-  R Core Team (2013). R: A language and environment for statistical computing. R Foundation for Statistical
-  Computing, Vienna, Austria. URL http://www.R-project.org/.
+\section{Bibliography}
+
 
 \pagebreak
 \appendix
 \section{Appendix: Code}
 \subsection{combn() --- OpenMP implementation}
 \lstinputlisting[language=C++]{combnOpenMP.cpp}
+<<<<<<< HEAD
 
+=======
+This is a recursive implementation of the combinations function. Here we used \verb; #pragma omp parallel for schedule(dynamic); on line 67 to help load balance the parallelization of the threading.  \\
+>>>>>>> parent of f8c8b5c... cleaned up the folder and some writeup changes
 \subsection{combn() --- Thrust implementation}
 \lstinputlisting[language=C++]{combn.cu}
 
@@ -139,12 +142,12 @@ There are also a variety of files specific for testing purposes included in the 
 \section{Appendix: Graphics}
 \subsection{Graphic D1}
 \begin{center}
-\includegraphics[scale = 0.4]{images/pascals-triangle-vert.jpg} \\
+\includegraphics[scale = 0.4]{pascals-triangle-vert.jpg} \\
 \end{center}
 
 \subsection{Graphic D2}
 \begin{center}
-\includegraphics[scale = 0.25]{images/5Choose3.jpg} \\
+\includegraphics[scale = 0.25]{5Choose3.jpg} \\
 \end{center}
 
 \newpage
