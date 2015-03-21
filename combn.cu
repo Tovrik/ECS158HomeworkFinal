@@ -38,7 +38,7 @@ struct find_index : public thrust::unary_function<tpl2int, int>
  
   __host__ __device__ int operator()(const tpl2int& x) const
   {
-    // If an element is true, then you get the y coordinate of the position
+    // If an element is 0, then get the index of that element
     if (x.get<0>() == 0) {
       return (x.get<1>() % sizeA)+1;
     }
@@ -53,7 +53,7 @@ struct remove_one {
   }
 };
 
-thrust::host_vector<int> calculateCombinations(int n, int r) {
+thrust::host_vector<int> combn(int n, int r) {
   std::vector<int> v(n);
   std::fill(v.begin() + r, v.end(), 1);
   int chooseSize = factorial(n) / (factorial(n-r)*factorial(r));
@@ -84,14 +84,6 @@ thrust::host_vector<int> calculateCombinations(int n, int r) {
 int main (int argc, char** argv) {
   int x = atoi(argv[1]);
   int m = atoi(argv[2]);
-  thrust::host_vector<int> vals = calculateCombinations(x, m);
-
-  //for(int i = 0; i < vals.size(); i++) {
-  //  if(i % m == 0) {
-  //    std::cout << std::endl;
-  //  }
-  //  std::cout << vals[i] << " ";
-  //}
-  //std::cout << std::endl;
+  thrust::host_vector<int> vals = combn(x, m);
   return 0;
 }
