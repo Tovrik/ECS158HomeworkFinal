@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 #include <thrust/reverse.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/functional.h>
@@ -31,11 +32,15 @@ long long int factorial(int n) {
 
 struct find_index : public thrust::unary_function<tpl2int, int>
 {
+  const int sizeA;
+
+  find_index(int _sizeA) : sizeA(_sizeA) {}
+ 
   __host__ __device__ int operator()(const tpl2int& x) const
   {
     // If an element is true, then you get the y coordinate of the position
     if (x.get<0>() == 0) {
-      return (x.get<1>() % 5)+1;
+      return (x.get<1>() % sizeA)+1;
     }
     else return -1;
    }
@@ -68,24 +73,25 @@ thrust::host_vector<int> calculateCombinations(int n, int r) {
   
   idxzip first = thrust::make_zip_iterator(thrust::make_tuple(dev_bits.begin(), first_iter));
   idxzip last = thrust::make_zip_iterator(thrust::make_tuple(dev_bits.end(), last_iter));
-  thrust:: transform(first, last, allPositions.begin(), find_index());
+  thrust:: transform(first, last, allPositions.begin(), find_index(n));
   thrust:: copy_if(allPositions.begin(), allPositions.end(), allComb.begin(), remove_one());
   
   thrust:: host_vector<int> returnArray(allComb.size());
   thrust:: copy(allComb.begin(), allComb.end(), returnArray.begin());
   return returnArray; 
 }
+
 int main (int argc, char** argv) {
-  int x = 5;
-  int m = 3;
+  int x = atoi(argv[1]);
+  int m = atoi(argv[2]);
   thrust::host_vector<int> vals = calculateCombinations(x, m);
 
-  for(int i = 0; i < vals.size(); i++) {
-    if(i % m == 0) {
-      std::cout << std::endl;
-    }
-    std::cout << vals[i] << " ";
-  }
-  std::cout << std::endl;
+  //for(int i = 0; i < vals.size(); i++) {
+  //  if(i % m == 0) {
+  //    std::cout << std::endl;
+  //  }
+  //  std::cout << vals[i] << " ";
+  //}
+  //std::cout << std::endl;
   return 0;
 }
