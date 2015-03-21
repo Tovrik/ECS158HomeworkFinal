@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  20 MAR 2015 23:39
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  20 MAR 2015 23:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -348,7 +348,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 (./write-up.aux) ) 
 Here is how much of TeX's memory you used:
  5707 strings out of 493315
- 82349 string characters out of 6137904
+ 82351 string characters out of 6137904
  313290 words of memory out of 5000000
  9087 multiletter control sequences out of 15000+600000
  10211 words of font info for 37 fonts, out of 8000000 for 9000
@@ -367,7 +367,7 @@ r17.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6
 b></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 ></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
 </usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on write-up.pdf (19 pages, 462378 bytes).
+Output written on write-up.pdf (19 pages, 460160 bytes).
 PDF statistics:
  126 PDF objects out of 1000 (max. 8388607)
  83 compressed objects within 1 object stream

@@ -3,7 +3,7 @@
 #Stefan Peterson stpeterson@ucdavis.edu
 
 #Import the existing libraries(mainly snow nad parallel)
-#library("snow")
+library("snow")
 
 combn_R <- function(x, m, FUN = NULL, simplify = TRUE) {
   # Determine the total size
@@ -34,21 +34,13 @@ combn_R <- function(x, m, FUN = NULL, simplify = TRUE) {
     combination <- combination[-(length(combination))]
   }
 
-  # # Assume v is a list since we are pushing to a 2d vector
-  # addComb <- function(v, v2) {
-  #   v[[length(v) + 1]] <- v2
-  # }
   position <- 1
 
   findCombs <- function(offset, k, v, combination) {
-    #position <- position + 1
     if(k == 0) {
       allCombinations[[position]] <<- combination
       position <<- position + 1
-      #v <- append(v, combination)
-      #print(combination)
-      #print("reaching 0")
-      #print(allCombinations)
+
       return(0)
     }
     for(i in offset:((length(values) - k)+1) ) {
@@ -73,13 +65,7 @@ combn_R <- function(x, m, FUN = NULL, simplify = TRUE) {
     findCombs(i + 1, m - 1, levelCombinations, combination)
     #print(combination)
     combination <- pop_back(combination)
-    #print(paste("Now Popping back\n"))
   }
-  print(allCombinations)
-
+  allCombinations
 }
 
-# Test code
-x <- 5
-m <- 3
-combn_R(x, m)
